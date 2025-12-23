@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎁 Geschenk für Ben 🎁</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 50%, #45b7d1 100%);
+            height: 100vh; display: flex; justify-content: center; align-items: center;
+            color: white; text-align: center;
+        }
+        .container { max-width: 500px; padding: 40px; background: rgba(255,255,255,0.1); border-radius: 20px; backdrop-filter: blur(10px); }
+        .warning { font-size: 32px; animation: pulse 2s infinite; margin-bottom: 20px; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        .date-check { font-size: 24px; margin: 20px 0; }
+        .password-box { display: none; margin-top: 30px; }
+        input[type="password"] { padding: 15px; font-size: 20px; border: none; border-radius: 10px; width: 250px; margin: 10px; }
+        .btn { padding: 15px 30px; font-size: 18px; background: #ff4757; color: white; border: none; border-radius: 50px; cursor: pointer; transition: all 0.3s; margin: 10px; }
+        .btn:hover { transform: scale(1.05); box-shadow: 0 10px 25px rgba(255,71,87,0.4); }
+        .success { background: #2ed573; }
+        .error { animation: shake 0.5s; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); } }
+        .ho-ho { font-size: 48px; animation: bounce 1s infinite; }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="ho-ho">🎅</div>
+        <div class="warning">⏰ WARNUNG! ⏰</div>
+        <div class="date-check" id="dateMessage"></div>
+        <button class="btn" onclick="checkDate()" id="checkBtn">Trotzdem öffnen? 😈</button>
+        
+        <div class="password-box" id="passwordBox">
+            <div style="font-size: 24px; margin: 20px 0;">"Ich hab doch gesagt, wirklich erst am 24.12 öffnen!"</div>
+            <input type="password" id="passwordInput" placeholder="Passwort eingeben...">
+            <br>
+            <button class="btn" onclick="checkPassword()">Freischalten 🎁</button>
+        </div>
+    </div>
+
+    <script>
+        const APP_URL = 'https://belawe.github.io/bens-bowl-generator/';
+        const CORRECT_PASSWORD = 'Ben2025';
+        const CHRISTMAS_DATE = new Date('2025-12-24T00:00:00').getTime();
+
+        function checkDate() {
+            const now = new Date().getTime();
+            const dateMessage = document.getElementById('dateMessage');
+            const passwordBox = document.getElementById('passwordBox');
+            const checkBtn = document.getElementById('checkBtn');
+            
+            if (now >= CHRISTMAS_DATE) {
+                dateMessage.innerHTML = '✅ Heute ist 24.12. oder später – Geschenk freigeschaltet!';
+                checkBtn.innerHTML = 'Zum Bowl Generator! 🥑';
+                checkBtn.classList.add('success');
+                checkBtn.onclick = () => window.location.href = APP_URL;
+            } else {
+                dateMessage.innerHTML = '❌ Noch nicht 24.12. – warte bis Heiligabend!';
+                passwordBox.style.display = 'block';
+                checkBtn.style.display = 'none';
+            }
+        }
+
+        function checkPassword() {
+            const input = document.getElementById('passwordInput');
+            const btn = event.target;
+            
+            if (input.value === CORRECT_PASSWORD) {
+                btn.innerHTML = 'Geschenk laden... 🎄';
+                btn.classList.add('success');
+                setTimeout(() => window.location.href = APP_URL, 1000);
+            } else {
+                btn.classList.add('error');
+                input.value = '';
+                input.placeholder = 'Falsch! Versuchs nochmal...';
+                setTimeout(() => btn.classList.remove('error'), 500);
+            }
+        }
+
+        // Auto-Check beim Laden
+        window.onload = checkDate;
+    </script>
+</body>
+</html>
